@@ -1,0 +1,180 @@
+/*!
+\mainpage FishGridMain
+
+\version @VERSION@
+\date @FISHGRIDDATE@
+\author Jan Benda and Joerg Henninger
+
+FishGrid is a collection of programs for acquisition and analyzing recordings of 
+electric fields of weakly electric fish using a grid of electrodes.
+
+- \ref FishGrid : Records and shows data from multiple grids.
+	Shows data from recorded files.
+- \ref FishGridStepper : Record data for stepping a fish through a predefined raster.
+- \ref FishGridRecorder : Records data without GUI.
+
+
+\section installation Installation
+
+\code
+./bootstrap.sh
+./configure --prefix=/usr --with-relacs=/usr
+make
+sudo make install
+\endcode
+
+
+\section configuration Configuration
+
+\ref FishGrid and \ref FishGridRecorder use \c fishgrid.cfg, and
+\ref FishGridStepper uses \c fishgridstepper.cfg as the configuration file.
+
+If there is a \c .fishgrid.cfg or \c .fishgridstepper.cfg, respectively, file in the home directory,
+this file is read in first.
+You can use these files to store a sensitive default configuration.
+Then the files \c fishgrid.cfg or \c fishgridstepper.cfg are read in from the current working directory.
+
+
+\subsection coordinates Coordinates
+
+The lower left electrode of each grid has the position (0,0).
+The distance of electrodes in x-direction (to the right)
+is \c ColumnDistance and in y-direction (upwards) is \c RowDistance.
+The grid-position is the position of the lower left electrode relative to the 
+lower left electrode of the first grid.
+The orientation of the grid is an angle of its x-axis relative to the one of the first grid.
+Positive angles indicate rotation to the left (anticlockwise).
+Grid-position and orientation of the first grid must be 0!
+Reference and ground electrode positions are also measured relative to the 
+lower left electrode.
+
+"Position of the grid origin" (on the "Recording" tab) is a description of the 
+position of the first grid's lower left electrode relative to some landmark.
+"Location of the grid" is a textual description of the geographical postion of the grid.
+
+
+\subsection timing Buffers and timing
+
+"Length of input buffer" specifies how many seconds of data the buffers for each grid can hold.
+60s is more than enough, but should not be lower than the data buffer length and interval.
+
+"Length of data buffer used for analysis" is the length of data segements that are fed into the analyzers.
+
+"Interval between data buffer updates" defines how often the data buffer for the analyzers 
+is updated with new data.
+
+
+\subsection blacklists Channel black-lists
+
+Channel black-lists allows you to to specify channels that should not be used for recordings.
+Open the configuration file in an editor.
+At the end of the file you find the \c *Acquisition section.
+Here you can specify for each daq board a blacklist.
+Channels can be specified like this
+\code
+blacklist1: 0-7,15,31
+\endcode
+When starting \ref FishGrid the used channels are printed on console.
+
+\section structure Program structure
+
+Common classes are:
+
+ConfigData: defines all configuration options of the electrode grids.
+See the documentation for ConfigData for details.
+
+DataThread: base class for accessing the data acquisition boards.
+Data are stored in an CyclicBuffer for each grid.
+This class is implemented by ComediThread, NIDAQmxThread, and SimulationThread.
+
+Analyzer: base class for analyzers that operate on the data. Available Analyzers
+are Idle, Traces, Spectra, RMSPlot, RMSPixel.
+
+PreProcessor: base class for pre-proccesors that pre-process the data before handing them to an Analyzer.
+Available PreProcessors are DeMean and CommonNoiseRemoval.
+
+Recording: Infrastructure for recording data to files.
+
+
+\section example Analyzer example
+There is an empty analyzer example in \c src/janalyzer.cc and \c include/janalyzer.h .
+There are some general comments in the .cc file. Look in the other analyzers
+Traces, Spectra, RMSPlot, and RMSPixel for further examples.
+After you implemented it and compiled it (run \c make)
+and you want to use it, uncomment in \c src/basewidget.cc
+line 67
+\code
+  addAnalyzer( new JAnalyzer( this ), Qt::Key_J );
+\endcode
+and \c make and \c make \c install.
+Then by pressing 'J' you can activate this analyzer.
+
+
+\section ext3 Put an EXT3/EXT4 filesystem on the harddrives
+
+Login as root:
+\code
+su
+\endcode
+
+Run the \c fdisk program to check and change the partitions.  The SATA
+harddrives are the \c /dev/sda, \c /dev/sdb, \c /dev/sdc, ... devices.
+The internal harddrives come first (\c sda with the root partition, \c
+sdb, \c sdc).  USB disks follow (if you have only a single internal
+harddrive, then the USB disk appears most likely as \c /dev/sdb. If
+you have three internal harddrives, then the USB disk is \c dev\sdd).
+You can simply run \c dmesg to find out which device file is you USB
+harddrive. In the about 10 last lines it writes several times \c
+[sdX]. Then \c /dev/sdX is your USB harddrive.  Don't touch the \c
+/dev/sda drive!
+\code
+fdisk /dev/sdb
+\endcode
+
+If you run fdisk on a plain (non partitioned) disk, \c fdisk might
+issue some suggestions what to do. Follow these suggestions!
+Press \c p for showing the
+partition table.  Then either press \c d for deleting the existing
+partion(s) and then \c n for creating a new one. Or edit the existing
+partition type by pressing \c t and enter \c 83 for the Linux
+partition type. Write the partition table back onto the USB harddrive
+by pressing \c w.
+
+Format the first partition on the \c sdb device:
+\code
+mkfs.ext4 -L efishdata1 /dev/sdb1
+\endcode
+\c efishdata1 is the volume label.
+
+For automated mounting, add something like the following line for each partition
+to the file \c /etc/fstab:
+\code
+/dev/sdb1    /data1    ext4   defaults   0   2
+\endcode
+Here, \c /dev/sdb1 is the partition you want to mount onto the target directory \c data1.
+You have to create the target directory beforehand (i.e. \c mkdir \c /data1 ).
+Once added to \c /etc/fstab, run \c mount \c -a to actually mount the partitions.
+Check the availability of the mounted partitions with \c mount or \c df \c -h .
+
+
+\section buffersize Increase comedi buffer-size
+
+Increase the DMA buffer sizes of the comedi driver by adding the following line to
+the file \c /etc/rc.local :
+\code
+comedi_config --read-buffer 640  --write-buffer 640 /dev/comedi0
+\endcode
+
+
+\section charger The old battery charger
+The values for charging the batteries are:
+
+20 cells
+
+1.48 V
+
+500mA
+
+3600mAh
+
+*/

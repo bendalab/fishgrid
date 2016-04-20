@@ -1,0 +1,33 @@
+/*!
+\page FishGridCalibComedi
+
+FishGridCalibComedi is a simple command line program that transfers
+the callibration coefficients of comedi to the fishgrid.cfg configuration file.
+
+
+\section usage Usage
+
+Let the DAQ boards run for at least 10 min to let them warm up.
+
+Calibrate the boards (as root) by executing
+\code
+comedi_soft_calibrate -f /dev/comedi0
+comedi_soft_calibrate -f /dev/comedi1
+...
+\endcode
+
+Make sure that all configuration parameter in \c fishgrid.cfg are properly set 
+(in particular the \c Maximum \c voltage and the \c Gain \c factor in the 
+\c Hardware \c Settings tab).
+
+Save your configuration file prior to calling \c fishgridcalibcomedi
+\code
+cp fishgrid.cg fishgrid.cfg.org
+\endcode
+
+Then start \c fishgridcalibcomedi in the directory where you also want to run \c fishgrid.
+\c fishgridcalibcomedi reads options from the config file \c fishgrid.cfg in the current directory,
+retrieves the calibration data for each of the comedi devices,
+and writes them into the configuration file in the current directory.
+
+*/

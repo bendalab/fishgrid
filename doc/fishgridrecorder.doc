@@ -1,0 +1,51 @@
+/*!
+\page FishGridRecorder
+
+FishGridRecorder records electric fields of weakly electric
+fish using multiple grids of electrodes without using a GUI.
+
+
+\section usage Usage
+
+Start \c fishgridrecorder in the directory where you want to save your data (in a subdirectory).
+\c fishgridrecorder reads options from the config file \c ~/.fishgrid.cfg first
+and then from \c fishgrid.cfg in the current directory. 
+The command line options (see \c fishgrid --help) override the settings of the config files.
+All settings are saved back into the \c fishgrid.cfg file in the current directory
+when quitting the program, so that on the next run you start with 
+your previous settings right away.
+
+The analog-input channels of the data-acqusition boards are assigned
+to the electrodes of upto four grids. There can be multiple grids per
+daq-board and a single grid can span more than one daq-board.
+
+The data are continuously written into cyclic buffers.  For each grid
+there is exactly one buffer. The data from the electrodes of a grid
+are multiplexed into the respective buffer.  From the buffers the data
+get saved into a file.
+
+
+\section files Files
+\c fishgrid.cfg is the configuration file. It is read in from the directory
+from which you start \c fishgridrecorder. You can edit this file in a text editor
+or via the startup dialog.
+
+\c fishgridrecorder saves the following files to disc:
+- \c traces-gridx.raw : the voltage traces of each grid \a x in Volt. In multiplexed 4 byte float numbers.
+     Sampling rate and number of input channels can be obtained from \c fishgrid.cfg.
+- \c fishgrid.cfg : the configuration that was used for the recording
+- \c fishgrid.log : the log messages
+- \c timestamps.dat : the timestamps. A plain text file that you can view with any text editor or \c less.
+- \c metadata.xml : the configuration and meta data as an odML file
+
+
+\section structure Program structure
+
+In fishgridrecorder.cc is the main() function that parses the command
+line options and sets up Recorder for acquiring data. Recorder inherits
+ConfigData that provides options for configuring the electrode grid.
+Recorder starts an extra thread DataThread for acquisition or simulation
+of data (ComediThread, NIDAQmxThread, or SimulationThread, respectively).
+The Recording class manages all files that are written to disc.
+
+*/

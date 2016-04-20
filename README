@@ -1,0 +1,31 @@
+FishGrid
+--------
+
+Copyright (C) 2009 - 2014 
+Jan Benda <jan.benda@uni-tuebingen.de> and 
+Joerg Henninger <henninger@graslandschaft@posteo.de>
+
+
+The FishGrid ...
+
+
+License
+-------
+
+FishGrid is free software, you can redistribute it and/or modify it under
+the terms of the GNU General Public License (see the file COPYING).
+
+The GNU General Public License does not permit this software to be
+redistributed in proprietary programs.
+
+This library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+Installation
+------------
+
+For installation instructions, look at the file INSTALL.
+Further information is in doc/html.index.html.
+

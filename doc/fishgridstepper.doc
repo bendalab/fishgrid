@@ -1,0 +1,83 @@
+/*!
+\page FishGridStepper
+
+FishGridStepper records short sequencies of data for weakly electric
+fish that are stepped through predifend positions of a raster within a
+grid of electrodes.
+
+
+\section usage Usage
+
+Start \c fishgridstepper in the directory where you want to save your data (in a subdirectory).
+\c fishgridstepper reads options from the config file \c ~/.fishgridstepper.cfg first
+and then from \c fishgridstepper.cfg in the current directory. 
+The command line options (see \c fishgridstepper --help) override the settings of the config files.
+Finally, a dialog is launched that allows you to make further changes to the settings
+(can be disabled by the \c -n switch).
+All settings are saved back into the \c fishgridstepper.cfg file in the current directory
+when quitting the program, so that on the next run you start with 
+your previous settings right away.
+
+The analog-input channels of the data-acqusition boards are assigned
+to the electrodes of a single grid. The grid can span more than one daq-board.
+
+The main widget shows the raster of positions for which to record the
+fields.  The current position is the marked by the red dot, the
+previous one by a yellow dot.
+
+After activating a recording (\c Enter or \c backspace) the data are
+recorded and written to disk. For the whole session, a subdirectry is created
+(named by the data and time of the reocrding). For each raster position
+a single raw-data file is created that is named by the column and row index.
+The data from all recorded channels are multilexed as 4-byte floats into
+the raw-data files.
+
+\section keys Key shortcuts
+
+FishGridStepper can be completely controlled by the keyboard.
+
+- \c M : show window maximized/normalized
+- \c Enter : Start recording at next raster position (that is marked red).
+- \c Backspace : Redo recording at current raster position (that is marked yellow).
+
+
+\section configuration Configuration
+The first page of the configuration dialog defines the raster on which the fish will be moved
+relatively to the grid.
+The raster has a total width of \a RasterWidthX and height \a RasterWidthY. The raster nodes
+are separated by \a RasterStepX and \a RasterStepY.
+The origin of the raster's left lower node relative to the grids left lower electrode
+is given by \a RasterOriginX and \a RasterOriginY.
+%Recording starts at column \a RasterStartX and row \a RasterStartY.
+The horizontal orientation of the longitudinal axis of the fish relative to the
+y-axis of the grid and the raster is \a FishYaw.
+Positive yaw angles indicate rotation to the left (anticlockwise).
+The vertical orientation of the longitudinal axis of the fish relative to the
+horizontal plane is \a FishPitch.
+Positive angles indicate snout up.
+
+
+\section files Files
+\c fishgridstepper.cfg is the configuration file. It is read in from the directory
+from which you start \c fishgridstepper. You can edit this file in a text editor
+or via the startup dialog.
+
+\c fishgridstepper saves data immediately to disc:
+- \c traces-grid1-rastercc-rr.raw : the voltage traces of the grid at position \a cc (column index) and \a rr (rwo index) in Volt. In multiplexed 4 byte float numbers.
+     Sampling rate and number of input channels can be obtained from \c fishgrid.cfg.
+- \c fishgrid.cfg : the configuration that was used for the recording (a copy of fishgridstepper.cfg).
+- \c fishgrid.log : the log messages.
+- \c metadata.xml : the configuration and meta data as an odML file
+
+
+\section structure Program structure
+
+In fishgridstepper.cc is the main() function that parses the command
+line options and sets up Stepper for acquiring data. Stepper inherits
+ConfigData that provides options for configuring the electrode grid.
+Each time a raster position is recorded,
+Stepper starts an extra thread DataThread for acquisition or simulation
+of data (ComediThread, NIDAQmxThread, or SimulationThread, respectively).
+The Recording class manages all files that are written to disc.
+
+*/

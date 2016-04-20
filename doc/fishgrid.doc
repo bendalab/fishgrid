@@ -1,0 +1,181 @@
+/*!
+\page FishGrid
+
+FishGrid acquires and analyzes recordings of 
+electric fields of weakly electric fish using a grid of electrodes.
+
+
+\section usage Usage
+
+Start \c fishgrid in the directory where you want to save your data (in a subdirectory).
+\c fishgrid reads options from the config file \c ~/.fishgrid.cfg first
+and then from \c fishgrid.cfg in the current directory. 
+The command line options (see \c fishgridstepper --help) override the settings of the config files.
+Finally, a dialog is launched that allows you to make further changes to the settings
+(can be disabled by the \c -n switch).
+All settings are saved back into the \c fishgrid.cfg file in the current directory
+when quitting the program, so that on the next run you start with 
+your previous settings right away.
+
+The analog-input channels of the data-acqusition boards are assigned
+to the electrodes of upto four grids. There can be multiple grids per
+daq-board and a single grid can span more than one daq-board.
+Cycle through the grid with \c ALT plus \c ArrowLeft or \c ArrowRight.
+or by accesing them directly by pressing \c ALT plus the number of the grid.
+
+You can view the recorded input using different Analyzer modules.
+Activate them by their hot keys \c I, \c T, \c P, \c E, \c R or by cycling through them with 
+\c CTRL plus \c ArrowLeft or \c ArrowRight.
+Most of them let you see either all electrodes of a grid (press \c A), a single one (press \c S),
+or all electrodes of the selected grid merged into a single plot (press \c M).
+Select the electrode in either case with the arrow keys.
+Ranges of the plot axis are reduced (zoom in) by pressing \c SHIFT and \c X or \c SHIFT and \c Y
+for the x- and y-axis. The ranges are enlarged (zoom out) by pressing just
+\c x or \c y, respectively.
+Additional hotkeys for zooming are \c V for the voltage/rms/power range, 
+\c F for the frequency axis of the spectra, and \c + or \c - for the time axis.
+
+The data are pre-processsed by a sequence of PreProcessor modules before
+handing them to the Analyzer. In the startup dialog you can specify
+which PreProcessors to use. Dialogs for setting parameters of the PreProcessers are launched by pressing
+\c ALT and their hot key (\c M, \c C).
+
+The data are continuously written into cyclic buffers.  For each grid
+there is exactly one buffer. The data from the electrodes of a grid
+are multiplexed into the respective buffer.  From the buffers the data
+get saved into a file and periodically a section of this data is
+copied into a buffer and fed to the current Analyzer. The Analyzer
+operates on the whole length of this data section, but might not show
+all of this on the plots. E.g. RMSPixel computes the RMS values on the
+whole data section, Spectra computes the power spectra on the whole
+data section. The length of this data section can be increased by
+pressing \c SHIFT \c L, and decreased by \c L.  Further options that
+specify how the Analyzer works can be set by launching a dialog with
+\c O.  How often the data section is copied from the input buffer and
+analyzed by the Analyzer can be controlled by the "Interval between
+the data buffer updates" entry in the startup dialog.
+
+
+\section keys Key shortcuts
+
+FishGrid can be completely controlled by the keyboard.
+
+Plot selection:
+- \c ALT \c ArrowLeft, \c ALT \c ArrowRight : select previous/next grid
+- \c ALT \c 1, \c ALT \c 2, ... : select grid by its number
+- \c I : idle. Displays nothing
+- \c T : voltage trace plot
+- \c P : power spectrum plots
+- \c E : RMS voltage versus electrode (disabled)
+- \c R : RMS voltage pixels and fish trace (disabled)
+- \c A : show all traces
+- \c S : show a single trace
+- \c M : show all traces merged into a single plot (for power spectrum)
+- \c ArrowLeft, \c ArrowRight, \c ArrowUp, \c ArrowDown : select electrode
+- \c CTRL \c ArrowLeft, \c CTRL \c ArrowRight : select plot mode
+
+Analysis window:
+- \c L, \c + : make time window for analysis smaller by a factor 2
+- \c SHIFT \c L, \c - : make time window for analysis larger by a factor 2
+- \c O : launch options dialog
+
+Pre-processor dialogs:
+- \c ALT \c P : specify the preprocessor sequence
+- \c ALT \c M : de-mean
+- \c ALT \c C : common noise removal
+
+General:
+- \c SHIFT \c M : show window maximized/normalized
+
+
+\subsection daqkeys Data acquisition
+
+Plots:
+- \c Q : increase frequency of analysis and plotting (Quicker)
+- \c W : decrease frequency of analysis and plotting (sloWer)
+
+File saving:
+- \c Return : start saving recording to a file
+- \c Alt + \c Return : stop saving recording to a file
+- \c Backspace : make a time stamp
+
+
+\subsection browsekeys Data browser
+
+Navigation:
+- \c Q : Increase time increments (Quicker)
+- \c W : Decrease time increments (sloWer)
+- \c SPACE : Toggle auto increment
+- \c PageUp : One page up (earlier, go left)
+- \c PageDown : One page down (later, go right)
+- \c ALT \c PageUp : 500 pages up (earlier, go left)
+- \c ALT \c PageDown : 500 pages down (later, go right)
+- \c HOME : Jump to the beginning of the recording
+- \c END : Jump to the end of the recording
+- \c < : Decrease channel offset of current grid (for debugging)
+- \c > : Increase channel offset of current grid (for debugging)
+- \c CRTL \c < : Decrease temporal offset of second board (for debugging)
+- \c CRTL \c > : Increase temporal offset of second board (for debugging)
+
+Time stamps:
+- \c 1, \c  2, ... \c 9 : Jump to time stamp 1, 2, ... 9, respectively
+- \c CTRL \c PageUp : Jump to preceding time stamp (next one to the left)
+- \c CTRL \c PageDown : Jump to succeeding time stamp (next one to the right)
+
+Save data:
+- \c CTRL \c S : Save 1 second of data to an ascii file
+- \c ALT \c S : Save changed channel and temporal offsets into current configuration file
+
+
+\subsection analyzerkeys Analyzer
+
+Traces:
+- \c V, \c Y : decrease voltage range (zoom in)
+- \c v, \c y : increase voltage range (zoom out)
+- \c +, \c X : decrease time range (zoom in)
+- \c -, \c x : increase time range (zoom out)
+- \c d : toggle whether to link visible time window to length of Data segement
+
+Spectra:
+- \c V, \c Y : decrease power range (zoom in)
+- \c v, \c y : increase power range (zoom out)
+- \c +, \c X, \c F : decrease frequency range (zoom in)
+- \c -, \c x, \c f : increase frequency range (zoom out)
+- \c d : toggle logarithmic (decibel) power scale
+
+RMSPlot:
+- \c V, \c Y : decrease voltage range (zoom in)
+- \c v, \c y : increase voltage range (zoom out)
+
+RMSPixel:
+- \c F : toggle fish trace
+
+
+\section files Files
+\c fishgrid.cfg is the configuration file. It is read in from the directory
+from which you start \c fishgrid. You can edit this file in a text editor
+or via the startup dialog.
+
+When \c fishgrid saves data to disc, it writes the following files:
+- \c traces-gridx.raw : the voltage traces of each grid \a x in Volt. In multiplexed 4 byte float numbers.
+     Sampling rate and number of input channels can be obtained from \c fishgrid.cfg.
+- \c fishgrid.cfg : the configuration that was used for the recording
+- \c fishgrid.log : the log messages
+- \c timestamps.dat : the timestamps. A plain text file that you can view with any text editor or \c less.
+- \c metadata.xml : the configuration and meta data as an odML file
+
+
+\section structure Program structure
+
+In fishgrid.cc is the main() function that parses the command line options
+and either sets up FishGridWidget for acquiring data or BrowseDataWidget
+for browsing previously recorded data. Both classes inherit BaseWidget
+that controls the Analyzer widgets that analyze and display the data.
+BaseWidget inherits ConfigData that provides options for configuring the electrode grid.
+The Analyzer implemented are: Idle, Traces, Spectra, RMSPlot, RMSPixel.
+
+FishGridWidget starts an extra thread DataThread for acquisition or simulation
+of data (ComediThread, NIDAQmxThread, or SimulationThread, respectively).
+The Recording class manages all files that are written to disc during a recording.
+
+*/
