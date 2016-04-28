@@ -110,27 +110,47 @@ and \c make and \c make \c install.
 Then by pressing 'J' you can activate this analyzer.
 
 
-\section ext3 Put an EXT3/EXT4 filesystem on the harddrives
+\section ext3 Put an EXT4 filesystem on harddrives
 
-Login as root:
-\code
-su
-\endcode
-
-Run the \c fdisk program to check and change the partitions.  The SATA
-harddrives are the \c /dev/sda, \c /dev/sdb, \c /dev/sdc, ... devices.
+The SATA harddrives are the \c /dev/sda, \c /dev/sdb, \c /dev/sdc, ... devices.
 The internal harddrives come first (\c sda with the root partition, \c
 sdb, \c sdc).  USB disks follow (if you have only a single internal
 harddrive, then the USB disk appears most likely as \c /dev/sdb. If
-you have three internal harddrives, then the USB disk is \c dev\sdd).
-You can simply run \c dmesg to find out which device file is you USB
-harddrive. In the about 10 last lines it writes several times \c
-[sdX]. Then \c /dev/sdX is your USB harddrive.  Don't touch the \c
-/dev/sda drive!
+you have three internal harddrives, then the USB disk might be \c dev\sdd).
+You can also run \c dmesg to find out which device file is your USB
+harddrive. In the about 20 last lines it writes several times \c
+[sdX]. Then \c /dev/sdX is your USB harddrive.  A few lines further down in the \c dmesg output you might see lines like:
 \code
-fdisk /dev/sdb
+[171764.569376]  sdc: sdc1
+[171766.429189]  sdd: unknown partition table
 \endcode
+This tells you that \c /dev/sdc has a single partition \c /dev/sdc1,
+and that \c /dev/sdd is a blank disk, on which you need to create a
+partition table and a filesystem.
 
+In the following we assume that the new empty harddrive is \c /dev/sdd .
+
+Don't touch the \c /dev/sda drive!
+
+
+\subsection partition Partition the hardrive
+
+Run
+\code
+sudo parted -l
+\endcode
+to see all harddrives and their partitions available on your system.
+
+First we need to create a partition table on the harddrive:
+\code
+parted -s -a optimal /dev/sdd mklabel gpt -- mkpart primary ext4 1 -1
+\endcode
+This allocates the whole disk as a single primary partition \c /dev/sdd1 .
+
+On smaller harddrives (<3TB) the msdos partiotn table is sufficient. For manipulating a msdos partition table one can still use the older \c fdisk program:
+\code
+fdisk /dev/sdd
+\endcode
 If you run fdisk on a plain (non partitioned) disk, \c fdisk might
 issue some suggestions what to do. Follow these suggestions!
 Press \c p for showing the
@@ -140,21 +160,62 @@ partition type by pressing \c t and enter \c 83 for the Linux
 partition type. Write the partition table back onto the USB harddrive
 by pressing \c w.
 
-Format the first partition on the \c sdb device:
+\subsection format Put an ext4 filesystem on the partition
+
+Next, we need to format the first partition on the \c sdd device, i.e.
+we need to make a filesystem on this partition:
 \code
-mkfs.ext4 -L efishdata1 /dev/sdb1
+mkfs.ext4 -L efishdata1 /dev/sdd1
 \endcode
-\c efishdata1 is the volume label.
+\c efishdata1 is the volume label that you can choose appropriately.
+
+\subsection mount Mount the partition
+
+To be able to read and write files on a partition it needs to be mounted into the filesystem.
+
+As root you can do this manually like this:
+\code
+sudo  mount /dev/sdd1 /mnt
+\endcode
+This will make the filesystem on the \c /dev/sdd1 partition available
+in the /mnt directory.
+
+To unmount a disk, do
+\code
+umount /mnt
+\endcode
 
 For automated mounting, add something like the following line for each partition
-to the file \c /etc/fstab:
+to the file \c /etc/fstab, for example with \c sudo \c jed \c /etc/fstab :
 \code
-/dev/sdb1    /data1    ext4   defaults   0   2
+/dev/sdd1    /data1    ext4   defaults   0   2
 \endcode
-Here, \c /dev/sdb1 is the partition you want to mount onto the target directory \c data1.
+Here, \c /dev/sdd1 is the partition you want to mount onto the target directory \c data1.
 You have to create the target directory beforehand (i.e. \c mkdir \c /data1 ).
-Once added to \c /etc/fstab, run \c mount \c -a to actually mount the partitions.
+Once added to \c /etc/fstab, run \c mount \c -a to actually mount the partitions. The next time you boot the system, the partition is mounted automatically.
+
+For non-automatic mounting write the following line int \c /etc/fstab :
+\code
+/dev/sdd1    /data1    ext4   user,noauto,exec   0   2
+\endcode
+Then any user is allowed to mount and umount this partition manually with either one of the two commands:
+\code
+mount /dev/sdd1
+mount /data1
+\endcode
+
 Check the availability of the mounted partitions with \c mount or \c df \c -h .
+
+
+\subsection owner Set ownership
+
+Right now, only \c root can write onto the new partition.
+Run
+\code
+sudo chown efish:efish /data1
+\endcode
+to change the ownership to the user \c efish and the group \c efish .
+Now, the user \c efish can write to the new partition.
 
 
 \section buffersize Increase comedi buffer-size
@@ -164,6 +225,13 @@ the file \c /etc/rc.local :
 \code
 comedi_config --read-buffer 640  --write-buffer 640 /dev/comedi0
 \endcode
+
+
+\section chargecarbattery Charging 12 V car batteries
+
+For charing a 12 V car battery with 70 Ah use a current of about 5 to 10 A .
+
+A car battery is full if it has potential of more than 13 V .
 
 
 \section charger The old battery charger
