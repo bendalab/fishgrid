@@ -111,6 +111,15 @@ AM_CONDITIONAL(FISHGRID_COND_COMEDI,[test "$RELACS_COMEDI" != no])
 
 
 #################################################
+## USB and DAQFlex
+#################################################
+RELACS_LIB_USB()
+AM_CONDITIONAL(FISHGRID_COND_USB,[test "$RELACS_USB" != no])
+RELACS_DAQFLEX=${RELACS_USB}
+AM_CONDITIONAL(FISHGRID_COND_DAQFLEX,[test "$RELACS_DAQFLEX" != no])
+
+
+#################################################
 ## NIDAQmxBase
 #################################################
 FISHGRID_NIDAQMXBASE()
@@ -171,15 +180,18 @@ AC_OUTPUT
 cat <<SUMMARY
 
     Found COMEDI ................. ${RELACS_COMEDI}
+    Found DAQFlex (libusb) ....... ${RELACS_DAQFLEX}
     Found NIDAQmxBase ............ ${FISHGRID_NIDAQMX}
     Use GSL ...................... ${RELACS_GSL}
-    Found PortAudio .............. ${RELACS_PORTAUDIO}
     Generate API documentation ... ${DX_SUMMARY}
 
 If you can read these lines ./configure finished sucessfully.
 The FishGrid programs should build and install smoothly.
 
-Continue with .... \$ make
+Continue with ...... \$ make
+Run a demo ......... \$ src/fishgrid -3
+Install fishgrid ... \$ sudo make install
 
 SUMMARY
 
+#    Found PortAudio .............. ${RELACS_PORTAUDIO}
