@@ -8,13 +8,11 @@ run
 
 2. Configure fishgrid
 
-> ./configure --prefix=$HOME --with-relacs=$HOME --with-nidaqmxbase=/usr/local/natinst/nidaqmxbase
+> ./configure
 
-If you want to compile it using nidaqmxbase, then run
-
-> ./configure --prefix=$HOME --with-relacs=$HOME --with-nidaqmxbase=/usr/local/natinst/nidaqmxbase
-
-instead.
+#If you want to compile it using nidaqmxbase, then you might need to run
+#> ./configure --with-nidaqmxbase=/usr/local/natinst/nidaqmxbase
+#instead.
 
 
 3. Compile
@@ -27,12 +25,11 @@ instead.
 > make install
 
 
-5. Activate NIDAQmxBase driver
+#5. Activate NIDAQmxBase driver
+#> lsdaq
 
-> lsdaq
 
-
-6. Run
+5. Run
 
 > fishgrid
 
