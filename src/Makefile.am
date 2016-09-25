@@ -86,6 +86,12 @@ fishgrid_LDFLAGS += $(COMEDI_LDFLAGS)
 fishgrid_LDADD += $(COMEDI_LIBS)
 endif
 
+if FISHGRID_COND_DAQFLEX
+fishgrid_CPPFLAGS += $(USB_CPPFLAGS) 
+fishgrid_LDFLAGS += $(USB_LDFLAGS)
+fishgrid_LDADD += $(USB_LIBS)
+endif
+
 if FISHGRID_COND_NIDAQMX
 fishgrid_CPPFLAGS += $(FISHGRID_NIDAQMXBASE_CPPFLAGS) 
 fishgrid_LDFLAGS += $(FISHGRID_NIDAQMXBASE_LDFLAGS)
@@ -139,6 +145,11 @@ fishgrid_SOURCES = \
 if FISHGRID_COND_COMEDI
 fishgrid_SOURCES += \
     comedithread.cc ../include/comedithread.h
+endif
+if FISHGRID_COND_DAQFLEX
+fishgrid_SOURCES += \
+     daqflexcore.cc ../include/daqflexcore.h
+#    daqflexthread.cc ../include/daqflexthread.h
 endif
 if FISHGRID_COND_NIDAQMX
 fishgrid_SOURCES += \
