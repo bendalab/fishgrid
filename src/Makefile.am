@@ -14,53 +14,53 @@ endif
 
 
 
-jserver_CPPFLAGS = \
-    -I$(srcdir)/../include \
-    $(QT4_CPPFLAGS) \
-    $(GSL_CPPFLAGS) \
-    $(RELACS_LIBS_CPPFLAGS)
+#jserver_CPPFLAGS = \
+#    -I$(srcdir)/../include \
+#    $(QT4_CPPFLAGS) \
+#    $(GSL_CPPFLAGS) \
+#    $(RELACS_LIBS_CPPFLAGS)
 
-jserver_LDFLAGS = \
-    $(QT4_LDFLAGS) \
-    $(GSL_LDFLAGS) \
-    $(RELACS_LIBS_LDFLAGS)
+#jserver_LDFLAGS = \
+#    $(QT4_LDFLAGS) \
+#    $(GSL_LDFLAGS) \
+#    $(RELACS_LIBS_LDFLAGS)
 
-jserver_LDADD = \
-    $(QT4_LIBS) \
-    $(GSL_LIBS) \
-    $(RELACS_LIBS_LIBS)
+#jserver_LDADD = \
+#    $(QT4_LIBS) \
+#    $(GSL_LIBS) \
+#    $(RELACS_LIBS_LIBS)
 
-JSERVER_MOCFILES =
+#JSERVER_MOCFILES =
 
-$(jserver_OBJECTS) : ${JSERVER_MOCFILES}
+#$(jserver_OBJECTS) : ${JSERVER_MOCFILES}
 
-jserver_SOURCES = \
-    jserver.cc
+#jserver_SOURCES = \
+#    jserver.cc
 
 
 
-jclient_CPPFLAGS = \
-    -I$(srcdir)/../include \
-    $(QT4_CPPFLAGS) \
-    $(GSL_CPPFLAGS) \
-    $(RELACS_LIBS_CPPFLAGS)
+#jclient_CPPFLAGS = \
+#    -I$(srcdir)/../include \
+#    $(QT4_CPPFLAGS) \
+#    $(GSL_CPPFLAGS) \
+#    $(RELACS_LIBS_CPPFLAGS)
 
-jclient_LDFLAGS = \
-    $(QT4_LDFLAGS) \
-    $(GSL_LDFLAGS) \
-    $(RELACS_LIBS_LDFLAGS)
+#jclient_LDFLAGS = \
+#    $(QT4_LDFLAGS) \
+#    $(GSL_LDFLAGS) \
+#    $(RELACS_LIBS_LDFLAGS)
 
-jclient_LDADD = \
-    $(QT4_LIBS) \
-    $(GSL_LIBS) \
-    $(RELACS_LIBS_LIBS)
+#jclient_LDADD = \
+#    $(QT4_LIBS) \
+#    $(GSL_LIBS) \
+#    $(RELACS_LIBS_LIBS)
 
-JCLIENT_MOCFILES =
+#JCLIENT_MOCFILES =
 
-$(jclient_OBJECTS) : ${JCLIENT_MOCFILES}
+#$(jclient_OBJECTS) : ${JCLIENT_MOCFILES}
 
-jclient_SOURCES = \
-    jclient.cc
+#jclient_SOURCES = \
+#    jclient.cc
 
 
 
@@ -150,106 +150,106 @@ fishgrid_SOURCES += \
 endif
 
 
-fishgridstepper_CPPFLAGS = \
-    -I$(srcdir)/../include \
-    $(QT4_CPPFLAGS) \
-    $(GSL_CPPFLAGS) \
-    $(RELACS_LIBS_CPPFLAGS)
+#fishgridstepper_CPPFLAGS = \
+#    -I$(srcdir)/../include \
+#    $(QT4_CPPFLAGS) \
+#    $(GSL_CPPFLAGS) \
+#    $(RELACS_LIBS_CPPFLAGS)
 
-fishgridstepper_LDFLAGS = \
-    $(QT4_LDFLAGS) \
-    $(GSL_LDFLAGS) \
-    $(RELACS_LIBS_LDFLAGS)
+#fishgridstepper_LDFLAGS = \
+#    $(QT4_LDFLAGS) \
+#    $(GSL_LDFLAGS) \
+#    $(RELACS_LIBS_LDFLAGS)
 
-fishgridstepper_LDADD = \
-    $(QT4_LIBS) \
-    $(GSL_LIBS) \
-    $(RELACS_LIBS_LIBS)
+#fishgridstepper_LDADD = \
+#    $(QT4_LIBS) \
+#    $(GSL_LIBS) \
+#    $(RELACS_LIBS_LIBS)
 
-if FISHGRID_COND_COMEDI
-fishgridstepper_CPPFLAGS += $(COMEDI_CPPFLAGS) 
-fishgridstepper_LDFLAGS += $(COMEDI_LDFLAGS)
-fishgridstepper_LDADD += $(COMEDI_LIBS)
-endif
+#if FISHGRID_COND_COMEDI
+#fishgridstepper_CPPFLAGS += $(COMEDI_CPPFLAGS) 
+#fishgridstepper_LDFLAGS += $(COMEDI_LDFLAGS)
+#fishgridstepper_LDADD += $(COMEDI_LIBS)
+#endif
 
-if FISHGRID_COND_NIDAQMX
-fishgridstepper_CPPFLAGS += $(FISHGRID_NIDAQMXBASE_CPPFLAGS) 
-fishgridstepper_LDFLAGS += $(FISHGRID_NIDAQMXBASE_LDFLAGS)
-fishgridstepper_LDADD += $(FISHGRID_NIDAQMXBASE_LIBS)
-endif
+#if FISHGRID_COND_NIDAQMX
+#fishgridstepper_CPPFLAGS += $(FISHGRID_NIDAQMXBASE_CPPFLAGS) 
+#fishgridstepper_LDFLAGS += $(FISHGRID_NIDAQMXBASE_LDFLAGS)
+#fishgridstepper_LDADD += $(FISHGRID_NIDAQMXBASE_LIBS)
+#endif
 
-FISHGRIDSTEPPER_MOCFILES = \
-    moc_stepper.cc
+#FISHGRIDSTEPPER_MOCFILES = \
+#    moc_stepper.cc
 
-$(fishgridstepper_OBJECTS) : ${FISHGRIDSTEPPER_MOCFILES}
+#$(fishgridstepper_OBJECTS) : ${FISHGRIDSTEPPER_MOCFILES}
 
-fishgridstepper_SOURCES = \
-    fishgridstepper.cc \
-    configdata.cc ../include/configdata.h \
-    stepper.cc ../include/stepper.h \
-    datathread.cc ../include/datathread.h \
-    simulationthread.cc ../include/simulationthread.h \
-    recording.cc ../include/recording.h \
-    ../include/cyclicbuffer.h
-if FISHGRID_COND_COMEDI
-fishgridstepper_SOURCES += \
-    comedithread.cc ../include/comedithread.h
-endif
-if FISHGRID_COND_NIDAQMX
-fishgridstepper_SOURCES += \
-    nidaqmxthread.cc ../include/nidaqmxthread.h
-endif
+#fishgridstepper_SOURCES = \
+#    fishgridstepper.cc \
+#    configdata.cc ../include/configdata.h \
+#    stepper.cc ../include/stepper.h \
+#    datathread.cc ../include/datathread.h \
+#    simulationthread.cc ../include/simulationthread.h \
+#    recording.cc ../include/recording.h \
+#    ../include/cyclicbuffer.h
+#if FISHGRID_COND_COMEDI
+#fishgridstepper_SOURCES += \
+#    comedithread.cc ../include/comedithread.h
+#endif
+#if FISHGRID_COND_NIDAQMX
+#fishgridstepper_SOURCES += \
+#    nidaqmxthread.cc ../include/nidaqmxthread.h
+#endif
 
 
 
-fishgridrecorder_CPPFLAGS = \
-    -I$(srcdir)/../include \
-    $(QT4CORE_CPPFLAGS) \
-    $(GSL_CPPFLAGS) \
-    $(RELACS_LIBS_CPPFLAGS)
+#fishgridrecorder_CPPFLAGS = \
+#    -I$(srcdir)/../include \
+#    $(QT4CORE_CPPFLAGS) \
+#    $(GSL_CPPFLAGS) \
+#    $(RELACS_LIBS_CPPFLAGS)
 
-fishgridrecorder_LDFLAGS = \
-    $(QT4CORE_LDFLAGS) \
-    $(GSL_LDFLAGS) \
-    $(RELACS_LIBS_LDFLAGS)
+#fishgridrecorder_LDFLAGS = \
+#    $(QT4CORE_LDFLAGS) \
+#    $(GSL_LDFLAGS) \
+#    $(RELACS_LIBS_LDFLAGS)
 
-fishgridrecorder_LDADD = \
-    $(QT4CORE_LIBS) \
-    $(GSL_LIBS) \
-    $(RELACS_LIBS_LIBS)
+#fishgridrecorder_LDADD = \
+#    $(QT4CORE_LIBS) \
+#    $(GSL_LIBS) \
+#    $(RELACS_LIBS_LIBS)
 
-if FISHGRID_COND_COMEDI
-fishgridrecorder_CPPFLAGS += $(COMEDI_CPPFLAGS) 
-fishgridrecorder_LDFLAGS += $(COMEDI_LDFLAGS)
-fishgridrecorder_LDADD += $(COMEDI_LIBS)
-endif
+#if FISHGRID_COND_COMEDI
+#fishgridrecorder_CPPFLAGS += $(COMEDI_CPPFLAGS) 
+#fishgridrecorder_LDFLAGS += $(COMEDI_LDFLAGS)
+#fishgridrecorder_LDADD += $(COMEDI_LIBS)
+#endif
 
-if FISHGRID_COND_NIDAQMX
-fishgridrecorder_CPPFLAGS += $(FISHGRID_NIDAQMXBASE_CPPFLAGS) 
-fishgridrecorder_LDFLAGS += $(FISHGRID_NIDAQMXBASE_LDFLAGS)
-fishgridrecorder_LDADD += $(FISHGRID_NIDAQMXBASE_LIBS)
-endif
+#if FISHGRID_COND_NIDAQMX
+#fishgridrecorder_CPPFLAGS += $(FISHGRID_NIDAQMXBASE_CPPFLAGS) 
+#fishgridrecorder_LDFLAGS += $(FISHGRID_NIDAQMXBASE_LDFLAGS)
+#fishgridrecorder_LDADD += $(FISHGRID_NIDAQMXBASE_LIBS)
+#endif
 
-FISHGRIDRECORDER_MOCFILES =
+#FISHGRIDRECORDER_MOCFILES =
 
-$(fishgridrecorder_OBJECTS) : ${FISHGRIDRECORDER_MOCFILES}
+#$(fishgridrecorder_OBJECTS) : ${FISHGRIDRECORDER_MOCFILES}
 
-fishgridrecorder_SOURCES = \
-    fishgridrecorder.cc \
-    configdata.cc ../include/configdata.h \
-    recorder.cc ../include/recorder.h \
-    recording.cc ../include/recording.h \
-    datathread.cc ../include/datathread.h \
-    simulationthread.cc ../include/simulationthread.h \
-    ../include/cyclicbuffer.h
-if FISHGRID_COND_COMEDI
-fishgridrecorder_SOURCES += \
-    comedithread.cc ../include/comedithread.h
-endif
-if FISHGRID_COND_NIDAQMX
-fishgridrecorder_SOURCES += \
-    nidaqmxthread.cc ../include/nidaqmxthread.h
-endif
+#fishgridrecorder_SOURCES = \
+#    fishgridrecorder.cc \
+#    configdata.cc ../include/configdata.h \
+#    recorder.cc ../include/recorder.h \
+#    recording.cc ../include/recording.h \
+#    datathread.cc ../include/datathread.h \
+#    simulationthread.cc ../include/simulationthread.h \
+#    ../include/cyclicbuffer.h
+#if FISHGRID_COND_COMEDI
+#fishgridrecorder_SOURCES += \
+#    comedithread.cc ../include/comedithread.h
+#endif
+#if FISHGRID_COND_NIDAQMX
+#fishgridrecorder_SOURCES += \
+#    nidaqmxthread.cc ../include/nidaqmxthread.h
+#endif
 
 
 
