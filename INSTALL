@@ -1,3 +1,4 @@
+You need to install RELACS first. See www.relacs.net .
 
 1. Create the configure script
 
@@ -10,7 +11,7 @@ run
 
 > ./configure
 
-#If you want to compile it using nidaqmxbase, then you might need to run
+#If you want to compile fishgrid using nidaqmxbase, then you might need to run
 #> ./configure --with-nidaqmxbase=/usr/local/natinst/nidaqmxbase
 #instead.
 
@@ -33,7 +34,8 @@ run
 
 > fishgrid
 
-
+=====================================================================
+What follows are general instructions for the configure script:
 
 Installation Instructions
 *************************

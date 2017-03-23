@@ -1,12 +1,18 @@
 FishGrid
 --------
 
-Copyright (C) 2009 - 2016 
+Copyright (C) 2009 - 2017
 Jan Benda <jan.benda@uni-tuebingen.de> and 
 Joerg Henninger <graslandschaft@posteo.de>
 
+FishGrid is a C++ program running on Linux for recording data from
+many analog input channels, like for example from a 64 electrode grid
+used for recording activity of weakly electric fish.
 
-See doc/html/index.html for documentation.
+The data is displayed either as a voltage traces or as power spectra
+and is saved o disk.
+
+See doc/html/index.html for detailed documentation.
 
 
 License
@@ -27,5 +33,7 @@ Installation
 ------------
 
 For installation instructions, look at the file INSTALL.
-Further information is in doc/html.index.html.
+
+Further information is in doc/html/index.html that you get after
+compiling with make.
 
